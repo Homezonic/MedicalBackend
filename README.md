@@ -7,60 +7,44 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## About Project
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+a Laravel-based backend that will provide endpoints for the loading and submission of the above form. Your backend should have at least 2 endpoints - one GET endpoint to provide the laboratory tests (e.g. chest, cervical vertebrae, thoracic vertebrae) which will be displayed and one POST endpoint to handle the submitted data.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The submitted data should be sent in a structured email to email, subject should be “{username} medical data”. Include name at the footer of the submission email.
+Endpoints have authentication. Only authenticated users have access to the endpoints. Implemented using the “Authorization: Bearer {token}” header.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+You can create account to get bearer token, it is then stored to db bearer token field in users table
 
-## Learning Laravel
+## System Requirement base on my Use case
+MacOS
+Mamp Pro (Apache and MySql w/ MailHog)
+Postman Desktop
+Sql sample located at the root folder "medical.sql"
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Code Repo: https://github.com/Homezonic/MedicalBackend
+## Bearer Token:
+can be obtained by Registering a new account as i have added bearer-token field to users table for retrieval.
+but here is one for testing [ Homezonic ( 3|HkinvdbPnX0VN85xD25uVJhAPGAfdgeKyhi1kqEA ) ]
+## Database:
+My database port is 8889 because I used MampPro (please check your port and make changes in the .env file at the root to avoid unseen errors.) I have also created some pre data for this case, i two categories, (X-ray and Ultrasound, based on the interface given), on running migrations, you will have datas in the database already expect for user account, 
+## Testing:
+Run php artisan serve and also open new terminal and run npm run build to start vite.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Mail:
+I used MailHog which allows me to send mail locally. if you are to send the mail out, you have to change the mail settings in the .env file located at the root folder.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## To get lists of Test,
+i did two implementations,
+1. (GET) To get all the tests, which will also let you see the category it falls under.http://127.0.0.1:8000/api/labtests
+2. (GET) To Get tests by category http://127.0.0.1:8000/api/labtests/x-ray  (where x-ray is a category, another available category is ultrasound)
+3. (POST) To Post Data to Emailin my case, let's paint a scenario where the user wants to select more than one test in each category.
+http://localhost:8000/api/medical-tests?tests[xray][]=Chest&tests[xray][]=Shoulder%20Joint&tests[ultrasound][]=Obstetric&tests[ultrasound][]=Pelvis&other_tests=CT%20Scan,%20MRI&patient_name=Joshua
 
-## Laravel Sponsors
+It takes an input of an array then processes it and sends it as a mail to a predefined email. Below is a preview of the mail
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+## I also tried to implement Lighthouse-php GraphQL,
+I have never worked on GraphQL but i did follow their documentation to some extent and i was able to implement their function on retrieving of the data using the below query
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+http://localhost:8000/graphql?query={labtests{id,testname,categoryname}}
