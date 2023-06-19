@@ -1,0 +1,26 @@
+type Query {
+  users: [User!]! @all
+  labtests: [LabTest!]! @all
+}
+
+type LabTest {
+  id: ID!
+  testname: String!
+  categoryname: String!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+}
+
+
+type Mutation {
+  submitData(input: SubmitDataInput!): LabTest!
+}
+
+input SubmitDataInput {
+  testname: String!
+  categoryname: String!
+}
